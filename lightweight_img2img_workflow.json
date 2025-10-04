@@ -2,11 +2,11 @@
   "3": {
     "inputs": {
       "seed": 156680208700286,
-      "steps": 12,
-      "cfg": 5,
+      "steps": 8,
+      "cfg": 4,
       "sampler_name": "euler",
       "scheduler": "normal",
-      "denoise": 1,
+      "denoise": 0.6,
       "model": [
         "4",
         0
@@ -20,7 +20,7 @@
         0
       ],
       "latent_image": [
-        "5",
+        "10",
         0
       ]
     },
@@ -38,20 +38,9 @@
       "title": "Load Checkpoint"
     }
   },
-  "5": {
-    "inputs": {
-      "width": 512,
-      "height": 384,
-      "batch_size": 4
-    },
-    "class_type": "EmptyLatentImage",
-    "_meta": {
-      "title": "Empty Latent Image"
-    }
-  },
   "6": {
     "inputs": {
-      "text": "beautiful scenery nature glass bottle landscape, purple galaxy bottle, cinematic, 3D render",
+      "text": "space habitat modification",
       "clip": [
         "4",
         1
@@ -64,7 +53,7 @@
   },
   "7": {
     "inputs": {
-      "text": "text, watermark, blurry, low quality",
+      "text": "blurry, low quality, distorted",
       "clip": [
         "4",
         1
@@ -93,7 +82,7 @@
   },
   "9": {
     "inputs": {
-      "filename_prefix": "ComfyUI_batch",
+      "filename_prefix": "habitat_modified",
       "images": [
         "8",
         0
@@ -102,6 +91,31 @@
     "class_type": "SaveImage",
     "_meta": {
       "title": "Save Image"
+    }
+  },
+  "10": {
+    "inputs": {
+      "pixels": [
+        "11",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "11": {
+    "inputs": {
+      "image": "uploaded_image_placeholder"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
     }
   }
 }

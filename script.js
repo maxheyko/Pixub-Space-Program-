@@ -7,6 +7,13 @@ class ComfyUIClient {
     init() {
         this.customPrompt = document.getElementById('customPrompt');
         this.habitatType = document.getElementById('habitatType');
+        this.imageInput = document.getElementById('imageInput');
+        this.uploadZone = document.getElementById('uploadZone');
+        this.imagePreview = document.getElementById('imagePreview');
+        this.previewImg = document.getElementById('previewImg');
+        this.clearBtn = document.getElementById('clearBtn');
+        
+        this.uploadedImageData = null;
         this.generateBtn = document.getElementById('generateBtn');
         this.status = document.getElementById('status');
         this.imageContainer = document.getElementById('imageContainer');
@@ -32,6 +39,11 @@ class ComfyUIClient {
                 this.generateImage();
             }
         });
+
+        // Simple image upload
+        this.uploadZone.addEventListener('click', () => this.imageInput.click());
+        this.imageInput.addEventListener('change', (e) => this.handleImageUpload(e));
+        this.clearBtn.addEventListener('click', () => this.clearImage());
     }
 
     async generateImage() {
@@ -49,16 +61,23 @@ class ComfyUIClient {
         this.showStatus(`Starting ${generationType} generation...`, 'loading');
 
         try {
+            const requestData = {
+                prompt: prompt,
+                type: generationType
+            };
+
+            // Add image if uploaded
+            if (this.uploadedImageData) {
+                requestData.image = this.uploadedImageData;
+            }
+
             // Start the generation request (don't await yet)
             const generatePromise = fetch(`${this.serverUrl}/generate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
-                    prompt: prompt,
-                    type: generationType 
-                })
+                body: JSON.stringify(requestData)
             });
 
             // Start progress polling after a short delay
@@ -255,6 +274,38 @@ class ComfyUIClient {
         basePrompt += ', detailed, cinematic, sci-fi, realistic';
         
         return basePrompt;
+    }
+
+    handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            this.showStatus('Please select an image file', 'error');
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) { // 5MB limit
+            this.showStatus('Image too large. Max 5MB', 'error');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            this.uploadedImageData = e.target.result;
+            this.previewImg.src = e.target.result;
+            this.uploadZone.style.display = 'none';
+            this.imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    clearImage() {
+        this.uploadedImageData = null;
+        this.previewImg.src = '';
+        this.imageInput.value = '';
+        this.uploadZone.style.display = 'block';
+        this.imagePreview.style.display = 'none';
     }
 
     showProgress(percent) {

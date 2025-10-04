@@ -51,6 +51,20 @@
                         </div>
 
                         <div class="control-group">
+                            <label>Reference Image (Optional)</label>
+                            <div class="simple-upload" id="simpleUpload">
+                                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                                <div class="upload-zone" id="uploadZone">
+                                    <span>📷 Click to add reference image</span>
+                                </div>
+                                <div class="image-preview" id="imagePreview" style="display: none;">
+                                    <img id="previewImg" alt="Reference">
+                                    <button type="button" class="clear-btn" id="clearBtn">×</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
                             <label>Design Specifications</label>
                             <textarea 
                                 id="customPrompt" 
