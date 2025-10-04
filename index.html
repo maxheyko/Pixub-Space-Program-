@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Habitat Design Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cosmos">
+        <div class="stars"></div>
+        <div class="nebula"></div>
+        
+        <div class="container">
+            <header class="header">
+                <div class="mission-control">
+                    <div class="control-icon">
+                        🪨
+                    </div>
+                    <div class="control-info">
+                        <h1>NASA Space Habitat Design Studio</h1>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="mission-brief">
+                <div class="brief-content">
+                    <h2>Mission Objective</h2>
+                    <p>Design advanced space habitats supporting critical life systems: environmental control, power generation, crew quarters, research facilities, and sustainable operations for deep space exploration.</p>
+                </div>
+            </div>
+
+            <div class="workspace">
+                <div class="design-console">
+                    <div class="console-header">
+                        <h3>Design Console</h3>
+                        <div class="status-indicator"></div>
+                    </div>
+                    
+                    <div class="control-section">
+                        <div class="control-group">
+                            <label>Mission Type</label>
+                            <select id="habitatType" class="control-input">
+                                <option value="surface">Planetary Surface Base</option>
+                                <option value="orbital">Orbital Research Station</option>
+                                <option value="deep-space">Deep Space Outpost</option>
+                                <option value="lunar">Lunar Colony</option>
+                                <option value="mars">Mars Settlement</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Design Specifications</label>
+                            <textarea 
+                                id="customPrompt" 
+                                class="control-textarea"
+                                placeholder="Define habitat requirements: crew capacity, specialized systems, environmental challenges, mission duration, architectural features..."
+                                rows="4"
+                            ></textarea>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Visualization Mode</label>
+                            <div class="mode-selector">
+                                <label class="mode-option">
+                                    <input type="radio" name="genType" value="image" checked>
+                                    <span class="mode-indicator"></span>
+                                    <span class="mode-text">Static Analysis</span>
+                                </label>
+                                <label class="mode-option">
+                                    <input type="radio" name="genType" value="video">
+                                    <span class="mode-indicator"></span>
+                                    <span class="mode-text">Dynamic Analysis</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button id="generateBtn" class="launch-button">
+                            <span class="launch-icon">🚀</span>
+                            <span class="launch-text">Initialize Design</span>
+                        </button>
+
+                        <div id="status" class="system-status"></div>
+
+                        <div id="progressContainer" class="progress-module" style="display: none;">
+                            <div class="progress-header">
+                                <span class="progress-status">System Processing...</span>
+                                <span id="timer" class="mission-clock">00:00</span>
+                            </div>
+                            <div class="progress-track">
+                                <div id="progressFill" class="progress-beam"></div>
+                            </div>
+                            <div id="progressText" class="progress-data">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visualization-chamber">
+                    <div class="chamber-header">
+                        <h3>Habitat Visualization</h3>
+                        <div class="chamber-controls">
+                            <div class="control-dot active"></div>
+                            <div class="control-dot"></div>
+                            <div class="control-dot"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="imageContainer" class="hologram-display">
+                        <div class="standby-mode">
+                            <div class="hologram-projector">
+                                <div class="projector-ring"></div>
+                                <div class="projector-ring"></div>
+                                <div class="projector-ring"></div>
+                            </div>
+                            <h4>Hologram Projector Ready</h4>
+                            <p>Configure design parameters and initialize to project your space habitat visualization</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
