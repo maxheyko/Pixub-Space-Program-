@@ -32,6 +32,7 @@ class ComfyUIClient {
         });
         
         this.updateGenerateButton();
+        this.loadPromptFromURL();
 
         this.generateBtn.addEventListener('click', () => this.generateImage());
         this.customPrompt.addEventListener('keydown', (e) => {
@@ -306,6 +307,24 @@ class ComfyUIClient {
         this.imageInput.value = '';
         this.uploadZone.style.display = 'block';
         this.imagePreview.style.display = 'none';
+    }
+
+    loadPromptFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const promptParam = urlParams.get('prompt');
+        
+        if (promptParam) {
+            // Decode URL-encoded prompt and set it in the textarea
+            const decodedPrompt = decodeURIComponent(promptParam);
+            this.customPrompt.value = decodedPrompt;
+            
+            // Show loading message and auto-generate after 2 seconds
+            this.showStatus('Prompt loaded from URL - Auto-generating in 2 seconds...', 'loading');
+            
+            setTimeout(() => {
+                this.generateImage();
+            }, 2000);
+        }
     }
 
     showProgress(percent) {
