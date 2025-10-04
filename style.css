@@ -1118,4 +1118,146 @@ mission-brief {
     .design-console, .visualization-chamber {
         padding: 1.5rem;
     }
+}/* I
+mage Upload Styles */
+.image-upload-area {
+    border: 2px dashed var(--glass-border);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-upload-area:hover {
+    border-color: var(--stellar-cyan);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.upload-placeholder {
+    padding: 2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.upload-placeholder p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--stellar-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.upload-placeholder span {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.uploaded-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    max-height: 200px;
+}
+
+.uploaded-image img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.remove-image {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    background: rgba(239, 68, 68, 0.9);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.remove-image:hover {
+    background: rgba(239, 68, 68, 1);
+    transform: scale(1.1);
+}
+
+.image-upload-area.has-image {
+    border-style: solid;
+    border-color: var(--aurora-green);
+    background: rgba(77, 222, 128, 0.05);
+}/* 
+Lightweight Image Upload */
+.simple-upload {
+    margin-bottom: 1rem;
+}
+
+.upload-zone {
+    padding: 1rem;
+    border: 1px dashed var(--glass-border);
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.2);
+    transition: border-color 0.3s ease;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.upload-zone:hover {
+    border-color: var(--stellar-cyan);
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+    max-width: 200px;
+}
+
+.image-preview img {
+    width: 100%;
+    height: auto;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--glass-border);
+}
+
+.clear-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    background: var(--mars-red);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-btn:hover {
+    background: #dc2626;
 }

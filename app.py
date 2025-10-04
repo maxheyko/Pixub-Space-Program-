@@ -6,6 +6,9 @@ import uuid
 import time
 import websocket
 import threading
+import base64
+import io
+import os
 from urllib.parse import urlencode
 
 app = Flask(__name__)
@@ -124,8 +127,45 @@ except FileNotFoundError:
     video_workflow_template = None
     print("Video workflow not found - video generation disabled")
 
+try:
+    with open('lightweight_img2img_workflow.json', 'r') as f:
+        img2img_workflow_template = json.load(f)
+    print("Lightweight image-to-image workflow loaded successfully")
+except FileNotFoundError:
+    img2img_workflow_template = None
+    print("Image-to-image workflow not found")
+
 # Store progress for active generations
 active_generations = {}
+
+def save_uploaded_image(base64_image):
+    """Save uploaded base64 image to ComfyUI input directory"""
+    try:
+        # Remove data URL prefix if present
+        if base64_image.startswith('data:image'):
+            base64_image = base64_image.split(',')[1]
+        
+        # Decode base64 image
+        image_data = base64.b64decode(base64_image)
+        
+        # Create input directory if it doesn't exist
+        input_dir = os.path.join("ComfyUI", "input")
+        os.makedirs(input_dir, exist_ok=True)
+        
+        # Generate unique filename
+        filename = f"ref_{int(time.time())}_{uuid.uuid4().hex[:6]}.png"
+        filepath = os.path.join(input_dir, filename)
+        
+        # Save image directly
+        with open(filepath, 'wb') as f:
+            f.write(image_data)
+            
+        print(f"Saved reference image: {filename}")
+        return filename
+        
+    except Exception as e:
+        print(f"Error saving image: {e}")
+        raise Exception("Failed to process image")
 
 @app.route('/')
 def index():
@@ -144,6 +184,7 @@ def generate_image():
         data = request.get_json()
         prompt = data.get('prompt')
         generation_type = data.get('type', 'image')  # 'image' or 'video'
+        uploaded_image = data.get('image')  # Base64 encoded image
         
         if not prompt:
             return jsonify({"error": "Prompt is required"}), 400
@@ -151,15 +192,37 @@ def generate_image():
         if generation_type == 'video' and not video_workflow_template:
             return jsonify({"error": "Video generation not available"}), 400
         
-        print(f"Generating {generation_type} for prompt: {prompt}")
+        # Check if image-to-image
+        is_img2img = uploaded_image is not None
         
-        # Choose workflow based on type
-        if generation_type == 'video':
+        print(f"Generating {generation_type} for prompt: {prompt}")
+        if is_img2img:
+            print("Using lightweight image-to-image")
+        
+        # Choose workflow based on type and image
+        if is_img2img and img2img_workflow_template:
+            # Save uploaded image
+            image_filename = save_uploaded_image(uploaded_image)
+            
+            if generation_type == 'video':
+                # Image-to-image video: modify uploaded image and create variations
+                workflow = json.loads(json.dumps(video_workflow_template))
+                # We'll need to modify the video workflow to use the uploaded image
+                # For now, use regular video workflow with enhanced prompt
+                video_prompt = f"modify this habitat: {prompt}, cinematic, dynamic angles, different perspectives, detailed"
+                workflow["6"]["inputs"]["text"] = video_prompt
+            else:
+                # Image-to-image static: modify uploaded image once
+                workflow = json.loads(json.dumps(img2img_workflow_template))
+                workflow["11"]["inputs"]["image"] = image_filename
+                workflow["6"]["inputs"]["text"] = f"{prompt}, detailed"
+        elif generation_type == 'video':
+            # Text-to-video: create video from scratch
             workflow = json.loads(json.dumps(video_workflow_template))
-            # Enhanced prompt for better frame variation
             video_prompt = f"{prompt}, cinematic, dynamic angles, different perspectives, camera movement, detailed, high quality"
             workflow["6"]["inputs"]["text"] = video_prompt
         else:
+            # Text-to-image: create single image from scratch
             workflow = json.loads(json.dumps(workflow_template))
             workflow["6"]["inputs"]["text"] = prompt
             
